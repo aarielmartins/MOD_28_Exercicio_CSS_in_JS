@@ -3,8 +3,9 @@ import FormVagas from '../../components/FormVagas'
 
 import Vaga from '../../components/Vaga'
 
-import styles from './ListaVagas.module.css'
+import { Lista } from './styles'
 
+//TIPAGEM PARA A VAGA DE EMPREGO
 type Vaga = {
   id: string
   titulo: string
@@ -13,9 +14,10 @@ type Vaga = {
   modalidade: string
   salarioMin: number
   salarioMax: number
-  requisitos: string[]
+  requisitos: string[] //ARRAY DE STRING
 }
 
+//LISTA DE TODAS AS VAGAS
 const vagas = [
   {
     id: 1,
@@ -89,17 +91,28 @@ const vagas = [
   }
 ]
 
+//FUNÇÃO PARA FILTRA AS VAGAS
 const ListaVagas = () => {
+  //USESTATE PARA MUDAR E ARMAZENAR O VALOR DO FILTRO EM STRING
+  //INICIALMENTE SEM NADA
   const [filtro, setFiltro] = useState<string>('')
 
+  //FILTRAGEM DAS VAGAS
   const vagasFiltradas = vagas.filter(
+    //CONDIÇÃO DA FILTRAGEM:
+    //O FILTER PERCORRE O ARRAY DE VAGAS UMA POR UMA
+    //PARA CADA ITEM (X) ELE CHAMA A FUNÇÃO ABAIXO
+    //TRANSFORMA TUDO EM MINÚSCULA E PROCURA O FILTRO
+    //DENTRO DO TÍTULO. SE O TERMO ESTIVER EM POSIÇÃO MAIOR QUE ZERO É RETORNADO
     (x) => x.titulo.toLocaleLowerCase().search(filtro) >= 0
   )
 
   return (
     <div>
+      {/* ATUALIZA O FILTRO CONFORME O USUÁRIO PESQUISA */}
       <FormVagas aoPesquisar={(termo: string) => setFiltro(termo)} />
-      <ul className={styles.vagas}>
+      <Lista>
+        {/* AS VAGAS SÃO MAPEADAS PARA APARECEREM APENAS AS QUE PASSAM NO FILTRO*/}
         {vagasFiltradas.map((vag) => (
           <Vaga
             key={vag.id}
@@ -112,7 +125,7 @@ const ListaVagas = () => {
             requisitos={vag.requisitos}
           />
         ))}
-      </ul>
+      </Lista>
     </div>
   )
 }
